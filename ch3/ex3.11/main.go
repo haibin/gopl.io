@@ -23,7 +23,7 @@ func comma(s string) string {
 
     // Handle sign
     sign := ""
-    if string(s[0]) == "-" {
+    if s[0] == '-' {
         t = t[1:]
         sign = "-"
     }
