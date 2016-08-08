@@ -3,9 +3,66 @@
 
 package intset
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
+
+func TestLen(t *testing.T) {
+	var x IntSet
+	x.Add(132)
+	x.Add(133)
+	x.Add(239832)
+
+	if x.Len() != 3 {
+		t.Errorf("Len() return %d, want 3", x.Len())
+	}
+}
+
+func TestRemove(t *testing.T) {
+	var x IntSet
+	x.Add(132)
+	x.Add(133)
+	x.Add(239832)
+	if x.Len() != 3 {
+		t.Errorf("Len() return %d, want 3", x.Len())
+	}
+
+	x.Remove(133)
+	x.Remove(134)
+	x.Remove(11111111)
+	if x.Len() != 2 {
+		t.Errorf("Len() return %d, want 2", x.Len())
+	}
+}
+
+func TestClear(t *testing.T) {
+	var x IntSet
+	x.Add(132)
+	x.Add(133)
+	x.Add(239832)
+	x.Clear()
+	if x.Len() != 0 {
+		t.Errorf("Len() return %d, want 0", x.Len())
+	}
+}
+
+func TestCopy(t *testing.T) {
+	var x IntSet
+	x.Add(132)
+	x.Add(133)
+	x.Add(239832)
+
+	s := x.Copy().String()
+	want := "{132 133 239832}"
+	if s != want {
+		t.Errorf("Copy() returns %s, want %s", s, want)
+	}
+}
 
 func Example_one() {
+	// fmt.Println("***** 0")
+
 	//!+main
 	var x, y IntSet
 	x.Add(1)

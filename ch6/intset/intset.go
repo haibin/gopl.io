@@ -19,6 +19,46 @@ type IntSet struct {
 	words []uint64
 }
 
+// Len returns the number of elements
+func (s *IntSet) Len() int {
+	count := 0
+	for _, word := range s.words {
+		count += lenPerWord(word)
+	}
+	return count
+}
+
+func lenPerWord(w uint64) int {
+	count := 0
+	for i := 0; i < 64; i++ {
+		if w&1 == 1 {
+			count++
+		}
+		w = w >> 1
+	}
+	return count
+}
+
+// Remove removes x from the set
+func (s *IntSet) Remove(x int) {
+	word, bit := x/64, uint(x%64)
+	if word < len(s.words) {
+		s.words[word] &^= (1 << bit)
+	}
+}
+
+// Clear removes all elements from the set
+func (s *IntSet) Clear() {
+	s.words = nil
+}
+
+// Copy returns a copy of the set
+func (s *IntSet) Copy() *IntSet {
+	dst := make([]uint64, len(s.words))
+	copy(dst, s.words)
+	return &IntSet{dst}
+}
+
 // Has reports whether the set contains the non-negative value x.
 func (s *IntSet) Has(x int) bool {
 	word, bit := x/64, uint(x%64)
@@ -32,6 +72,7 @@ func (s *IntSet) Add(x int) {
 		s.words = append(s.words, 0)
 	}
 	s.words[word] |= 1 << bit
+	// fmt.Printf("%d %b\n", x, s.words)
 }
 
 // UnionWith sets s to the union of s and t.
@@ -53,6 +94,7 @@ func (s *IntSet) UnionWith(t *IntSet) {
 func (s *IntSet) String() string {
 	var buf bytes.Buffer
 	buf.WriteByte('{')
+
 	for i, word := range s.words {
 		if word == 0 {
 			continue
@@ -66,6 +108,7 @@ func (s *IntSet) String() string {
 			}
 		}
 	}
+
 	buf.WriteByte('}')
 	return buf.String()
 }
