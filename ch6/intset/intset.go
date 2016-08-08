@@ -59,6 +59,13 @@ func (s *IntSet) Copy() *IntSet {
 	return &IntSet{dst}
 }
 
+// AddAll adds a list of values
+func (s *IntSet) AddAll(x ...int) {
+	for _, e := range x {
+		s.Add(e)
+	}
+}
+
 // Has reports whether the set contains the non-negative value x.
 func (s *IntSet) Has(x int) bool {
 	word, bit := x/64, uint(x%64)

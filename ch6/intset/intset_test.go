@@ -60,9 +60,21 @@ func TestCopy(t *testing.T) {
 	}
 }
 
-func Example_one() {
-	// fmt.Println("***** 0")
+func TestAddAll(t *testing.T) {
+	var x IntSet
+	x.Add(132)
+	x.Add(133)
+	x.Add(239832)
 
+	x.AddAll(1, 3, 2)
+	s := x.String()
+	want := "{1 2 3 132 133 239832}"
+	if s != want {
+		t.Errorf("Copy() returns %s, want %s", s, want)
+	}
+}
+
+func Example_one() {
 	//!+main
 	var x, y IntSet
 	x.Add(1)
